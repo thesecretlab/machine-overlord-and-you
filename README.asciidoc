@@ -1,0 +1,176 @@
+= Machine Overlord And You
+
+== Description
+
+* The basics of machine learning: The differences between, and reasons
+to be interested in, supervised learning, unsupervised learning, and
+reinforcement learning and the different types of problems each can
+address
+* What Apple’s Core ML and Vision frameworks do
+* How to set up your Swift-based iOS development environment for machine
+learning
+* How to work with Keras and TensorFlow, the popular open source Python
+neural network and machine learning libraries, to create, manipulate,
+and bring models into CoreML
+* How to implement machine learning-based features in your iOS apps and
+load trained models for use in machine learning
+
+== Intro
+
+* Core ML is Apple’s framework for working with trained ML models
+** It supports lots of different types, including:
+** 30+ types of neural network layers
+** Standard models like SVMs, generalized linear models, tree ensembles
+** Makes it very straightforward for feeding data into a model and
+getting back results
+** Generates code for you that simplifies interaction with the model
+* Turi Create is a Python package that simplifies the process of
+creating machine learning models
+** It can also generate a Core ML model file for you
+* The workflow for this workshop will be:
+** We’ll generate or download a model
+** We’ll integrate it into an app
+** We’ll test it out
+* We’ve got a demo app for you to plug code into
+
+== Setting Up
+
+* Download the project and models.
+
+=== Setting up Turi Create
+
+1.  Install `pipenv`. On macOS:
+
+----
+$ brew install pipenv
+----
+
+On Linux, use your distribution’s package manager to install `pipenv`.
+
+[start=2]
+2.  Create your Pip environment and start a shell:
+
+----
+$ pipenv install .
+$ pipenv shell
+----
+
+[start=3]
+1.  Install `turicreate`
+
+----
+$ pipenv install turicreate
+----
+
+== Using a Sentiment Classifier Model
+
+* A sentiment classifier model is one that can predict whether some text
+has a positive sentiment (happy) or negative sentiment (unhappy).
+* We’ll create the model ourselves, using Amazon review data.
+
+=== Creating the Model
+
+First, download the data by running this command:
+
+----
+$ ./text_classification.py download-data
+----
+
+You will need to accept the license. The download is about 30MB. The
+data is product review data from Amazon, in gzipped TSV format; the file
+will be decompressed to your local computer.
+
+Next, process the data by running this command:
+
+----
+$ ./text_classification.py process-data Sentiment.sframe
+----
+
+This processes the data by looking at each review’s star rating; if it’s
+4 stars or more, it’s considered a positive review, otherwise it’s
+negative. An equal number of positive and negative reviews will be
+collected. The data is stored in an SFrame, which is written to disk.
+
+Finally, create the Core ML model by running this command:
+
+----
+$ ./text_classification.py Sentiment.sframe SentimentClassifier.mlmodel
+----
+
+This trains a model using this data, and generates a Core ML model that
+classifies bags of words as positive or negative.
+
+* Problems with the data
+** What’s a negative review? We only have star ratings
+** Need to interpret it
+** In this case we say ``4+ stars is positive, else negative''
+** There are more positive than negative reviews - this skews
+predictions positive
+** Ensure that we have an equal number of both positive and negative
+
+=== What It Does
+
+* We’ve trained a model that takes a bag of words (a collection of
+words, and the number of times they appear in the input)
+* Bag of words
+* Probability of class
+
+=== How To Use It
+
+// snip: sentiment_variables
+
+// snip: sentiment_bag_of_words
+
+// snip: sentiment_predict
+
+=== How It Works
+
+iOS 12 and macOS 10.14 include NLTokenizer, which is a more modern API,
+and sidesteps this for you - NSLanguageTokenizer works on older
+versions, and also lets you see a bit more of the process
+
+== Using an Image Classifier Model
+
+=== What It Does
+
+=== How To Use It
+
+=== How It Works
+
+== Using a Style Transfer Model
+
+=== What It Does
+
+=== How To Use It
+
+=== How It Works
+
+== Detecting Faces
+
+== Tracking Faces
+
+== Compiling Models on the Device
+
+* CoreML models must be compiled before they can be used
+* This is separate to the Swift classes that you use to communicate with
+it
+* Xcode compiles your models at build time
+* You can also compile a model at run time
+** Note that this isn’t the same thing as training!
+* Use cases:
+** You want to reduce the initial download size of your app
+** Not every feature in your app is used, so you want to only download
+the models that the user wants
+** You want to download an updated model that’s better tuned
+** You want to download additional models that extend your feature set
+without having to deliver an update to the App Store
+
+= Raw notes:
+
+== Intro
+
+Discuss Turi Create
+
+Discuss what an SFrame is (basically a very efficient table)
+
+== Installation
