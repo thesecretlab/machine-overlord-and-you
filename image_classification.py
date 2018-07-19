@@ -13,6 +13,16 @@ data = tc.image_analysis.load_images(DATA_PATH, with_path=True)
 # Create a label column from the path
 data['label'] = data['path'].apply(lambda path: 'dog' if '/Dog' in path else 'cat')
 
+
+COUNT_PER_CLASS=50
+
+print("Limiting to {} images per class".format(COUNT_PER_CLASS))
+
+cats = data[data['label'] == 'cat'].head(COUNT_PER_CLASS)
+dogs = data[data['label'] == 'dog'].head(COUNT_PER_CLASS)
+
+data = cats.append(dogs)
+
 print("Creating model...")
 
 # Create the model - it will automatically detect the image column, but we must provide

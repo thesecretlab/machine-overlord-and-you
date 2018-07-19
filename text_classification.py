@@ -39,13 +39,17 @@ negative = negative.head(review_count)
 # Now combine them back together
 reviews = positive.append(negative)
 
+# Rename 'review_body' to 'text', so that the generated model
+# calls the input "text"
+reviews = reviews.rename({"review_body": "text"})
+
 # Save the SFrame for later use
 MODEL_PATH = "amazon_reviews.sframe"
 reviews.save(MODEL_PATH)
 
 # Create the model! We're telling it to look at the 'review_body' column as its input,
 # and the 'sentimentClass' column as the label.
-model = tc.sentence_classifier.create(reviews, 'sentimentClass', features=['review_body'])
+model = tc.sentence_classifier.create(reviews, 'sentimentClass', features=['text'])
 
 # Evaluate this model
 evaluation = model.evaluate(reviews)

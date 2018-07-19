@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+turicreate = "==5.0b2"
+tabulate = "*"
+tqdm = "*"
+readchar = "*"
+
+[dev-packages]
+pylint = "*"
+rope = "*"
+
+[requires]
+python_version = "3.6"
